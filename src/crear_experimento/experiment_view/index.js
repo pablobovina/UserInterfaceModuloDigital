@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import './index.css';
+import ModalGeneric from './modal_generic.js';
 
 class ExperimentView extends Component {
   constructor(props) {
@@ -8,13 +9,14 @@ class ExperimentView extends Component {
     this.state = {};
   }
 
-
-  popUp = (e) =>{
-    console.log("levanto el popUp");
-    console.log(e.target.getAttribute('id'));
+  saveCheckPoint = (id,metadata) =>{
+    this.props.saveItem(id, metadata);
   }
 
-
+  deleteCheckPoint = (id) =>{
+    this.props.deleteItem(id);
+  }
+  
   render() {
     if(!this.props.isAuthenticated){
       return (<Redirect to="/"/>)
@@ -22,7 +24,7 @@ class ExperimentView extends Component {
 
     const res = <ul>
         {this.props.items.map(item => (
-          <li key={item.id} id={item.id} onClick={this.popUp}>{item.id}--{item.type}</li>
+          <ModalGeneric id={item.id} type={item.type} saveAction={this.saveCheckPoint} deleteAction={this.deleteCheckPoint}/>
         ))}
       </ul>;
     return res;

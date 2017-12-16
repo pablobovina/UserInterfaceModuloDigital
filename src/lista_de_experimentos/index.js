@@ -26,7 +26,9 @@ class ListaExperimento extends Component {
     const res = <div>
                 <PanelGeneral logout={this.props.logout} isAuthenticated={this.props.isAuthenticated} userAuthenticated={this.props.userAuthenticated} />
                 <ActionPanel logout={this.props.logout} userAuthenticated={this.props.userAuthenticated} selectedItem={this.state.selectedItem}/>
+                <div class="container-fluid">
                 <TablaExperimento setMessage={this.props.setMessage} setSelectedItem={this.setSelectedItem} logout={this.props.logout} isAuthenticated={this.props.isAuthenticated} userAuthenticated={this.props.userAuthenticated}/>
+                </div>
                 </div>;
     return res;
 

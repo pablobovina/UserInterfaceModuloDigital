@@ -17,6 +17,11 @@ class ActionPanel extends Component {
     this.setState({messagePanel: ""});
   }
 
+  onSaveClick = (e)=>{
+    this.props.saveAction();
+  }
+
+
   render (){
     const msg = this.state.messagePanel;
     const res =
@@ -26,8 +31,11 @@ class ActionPanel extends Component {
       </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item dropdown">
-          <button class="btn btn-primary" type="submit" onClick={this.props.addCheckPoint}>Agregar</button>
+          <li className="nav-item">
+            <button class="btn btn-primary" onClick={this.props.addCheckPoint}>Agregar</button>
+          </li>
+          <li className="nav-item">
+          <button class="btn btn-primary" onClick={this.onSaveClick}>Guardar</button>
           </li>
         </ul>
       </div>
