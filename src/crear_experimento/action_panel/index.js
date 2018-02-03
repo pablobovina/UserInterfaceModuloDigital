@@ -32,9 +32,6 @@ class ActionPanel extends Component {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <button class="btn btn-primary" onClick={this.props.addCheckPoint}>Agregar</button>
-          </li>
-          <li className="nav-item">
           <button class="btn btn-primary" onClick={this.onSaveClick}>Guardar</button>
           </li>
         </ul>
