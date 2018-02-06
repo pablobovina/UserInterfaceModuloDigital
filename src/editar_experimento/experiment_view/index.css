@@ -1,0 +1,43 @@
+.item_circle {width: 70px; height:70px; float: left; margin-left: 5px;}
+
+.item_loop {
+    position: relative;
+    font-size: 10px;
+    text-align: center;
+    top: -8px;
+}
+
+.item_type {
+    position: relative;
+    text-align: center;
+    font-size: 19px;
+    top: -18px;
+}
+
+.item_time {
+    position: relative;
+    text-align: center;
+    font-size: 10px;
+    top: -26px;
+}
+
+.item_freq {
+    position: relative;
+    text-align: center;
+    font-size: 10px;
+    top: -32px;
+}
+
+.item_msb {
+    position: relative;
+    text-align: center;
+    top: -38px;
+    font-size: 10px;
+}
+
+.item_lsb {
+    position: relative;
+    text-align: center;
+    top: -45px;
+    font-size: 10px;
+}
