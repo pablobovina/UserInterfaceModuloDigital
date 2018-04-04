@@ -24,7 +24,7 @@ class ExperimentView extends Component {
 
     const res = <ul>
         {this.props.items.map(item => (
-          <ModalGeneric id={item.id} type={item.type} saveAction={this.saveCheckPoint} deleteAction={this.deleteCheckPoint}/>
+          <ModalGeneric id={item.id} type={item.type} itemMeta={item} saveAction={this.saveCheckPoint} deleteAction={this.deleteCheckPoint}/>
         ))}
       </ul>;
     return res;

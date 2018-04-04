@@ -25,7 +25,18 @@ class CrearExperimento extends Component {
 
   addCheckPoint = (e)=>{
     this.setState((prevState) => ({
-        cpoints: prevState.cpoints.concat({id:Date.now(), type:"Continue"})
+        cpoints: prevState.cpoints.concat({
+          id: Date.now(),
+          freq_unit: "hz",
+          t_unit : "ns",
+          time: "0",
+          phase:"0",
+          lsb:"00000000",
+          msb:"00000000",
+          data:"0",
+          type:"C",
+          freq:"0"
+        })
       }));
   }
 
