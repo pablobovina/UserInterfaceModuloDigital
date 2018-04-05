@@ -9,7 +9,21 @@ import ExperimentAdmin from "./experiment_admin/index.js";
 class CrearExperimento extends Component {
   constructor(props) {
     super(props);
-    this.state = {cpoints:[], settings:{}};
+    this.state = {
+      cpoints:[], 
+      settings:{
+        a_bloq:"1",
+        a_ts_unit:"ns",
+        a_freq_unit:"hz",
+        a_times:"0",
+        a_freq:"0",
+        a_lsb:"00000000",
+        a_msb:"00000000",
+        a_name:"",
+        a_description:"",
+        a_ts:"0"
+      }
+    };
   }
 
   getIndexByKeyId(a,i){
@@ -109,7 +123,7 @@ class CrearExperimento extends Component {
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-2">
-                      <GeneralSettings saveAction={this.saveSettings}/>
+                      <GeneralSettings setup={this.state.settings} saveAction={this.saveSettings}/>
                     </div>
                     <div class="col">
                       <h2> Experiment Plan </h2>

@@ -97,23 +97,23 @@ class ModalGeneric extends Component {
               <div class="col">
               <div class="row"><label for="freq">Frequency</label></div>
               <div class="row"><input class="form-control" id="freq" placeholder="Frequency" value={this.state.freq} onChange={this.saveInput}/></div>
-              <div class="row"><label for="freq_unit">Frequency Unit</label>
+              <div class="row"><label for="freq_unit">Frequency Unit</label></div>
+              <div class="row">  
                 <select className="custom-select" id="freq_unit" value={this.state.freq_unit} onChange={this.saveInput}>
                   <option value="hz">Hz</option>
                   <option value="mhz">Mhz</option>
                 </select>
-              </div>
+              </div>  
               </div>
               <div class="col">
               <div class="row"><label for="phase">Phase List</label></div>
               <div class="row"><input class="form-control" id="phase" placeholder="Phase List" value={this.state.phase} onChange={this.saveInput}/></div>
               </div>
             </div>
-
             <div class="row">
               <div class="col">
               <div class="row"><label for="lsb">Pattern 8-bit LSB</label></div>
-                <div class="row"><input class="form-control" id="lsb" placeholder="Pattern 8-bit LSB" value={this.state.lsb} onChange={this.saveInput}/></div>
+              <div class="row"><input class="form-control" id="lsb" placeholder="Pattern 8-bit LSB" value={this.state.lsb} onChange={this.saveInput}/></div>
               </div>
               <div class="col">
               <div class="row"><label for="msb">Pattern 8-bit MSB</label></div>
