@@ -52,8 +52,8 @@ class AuthExample extends Component {
     const res = <Router>
               <div>
               <Route exact path="/" render = {()=>(<SesionInicio login={this.login} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
-              <Route path="/:userName/crear_experimento" render = {()=>(<CrearExperimento logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
-              <Route path="/:userName/editar_experimento/:idExp" render={()=>(<EditarExperimento logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
+              <Route path="/:userName/crear_experimento" render = {(props)=>(<CrearExperimento {...props} logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
+              <Route path="/:userName/editar_experimento/:idExp" render={(props)=>(<EditarExperimento {...props} logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
               <Route path="/:userName/ver_experimento/:idExp" render={()=>(<VerExperimento logout={this.logout}/>)}/>
               <Route path="/:userName/lista_de_experimentos" render={()=>(<ListaExperimento logout={this.logout} setMessage={this.setMessage} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
               <Route path="/:userName/monitor_de_estado" render={()=>(<MonitorEstado logout={this.logout}/>)}/>
