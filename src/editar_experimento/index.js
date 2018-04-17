@@ -116,7 +116,7 @@ class EditarExperimento extends Component {
 
     //si venimos de una accion guardar-ejecutar exitosa
     if(this.state.execute){
-      var url  = ["/",this.props.userAuthenticated,"/vista_parcial/", this.state.experimentSaved].join("");
+      var url  = ["/",this.props.userAuthenticated,"/vista_parcial"].join("");
       console.log("nos vamos a vista parcial de la ejecucion en curso");
       console.log(url);
       return (<Redirect to={url}/>);

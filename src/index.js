@@ -59,7 +59,7 @@ class AuthExample extends Component {
               <Route path="/:userName/monitor_de_estado" render={()=>(<MonitorEstado logout={this.logout}/>)}/>
               <Route path="/:userName/procesamiento_de_datos/:idExp" render={()=>(<ProcesamientoDato logout={this.logout}/>)}/>
               <Route path="/:userName/resultado_de_experimentos" render={()=>(<ResultadoExperimento logout={this.logout}/>)}/>
-              <Route path="/:userName/vista_parcial/:idExp" render={()=>(<VistaParcial logout={this.logout} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
+              <Route path="/:userName/vista_parcial" render={()=>(<VistaParcial logout={this.logout} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
               </div>
             </Router>;
     return res;
