@@ -7,9 +7,13 @@ class TablaExperimento extends Component {
   constructor(props){
     super(props);
     this.state = {};
-    var url  = ['/',this.props.userAuthenticated,'/experiments'].join("");
+    var url  = ['/','user/',this.props.userAuthenticated,'/experiments/'].join("");
     var axios = require("axios");
-    axios.get(url)
+
+    axios({method: "GET",
+            url: url,
+            headers: {"X-CSRFToken": this.props.token, "sessionid": this.props.s_id}
+        })
     .then((data)=>{
       console.log(data);
       console.log(data.data.datas);

@@ -12,6 +12,7 @@ import SesionInicio from './sesion_de_inicio/index.js';
 import VistaParcial from './vista_parcial/index.js';
 import VerExperimento from './ver_experimento/index.js';
 
+
 class AuthExample extends Component {
   constructor(props) {
     super(props);
@@ -21,9 +22,32 @@ class AuthExample extends Component {
     var usr = d!=null && d.userAuthenticated ? d.userAuthenticated : "";
     var isAuth = d!=null && d.isAuthenticated ? d.isAuthenticated : false;
     var msg = d!=null && d.message ? d.message : "";
-    this.state = {isAuthenticated:isAuth, userAuthenticated:usr, message:msg};
+
+    var allCookies = document.cookie;
+    console.log(allCookies);
+
+    var csrftoken = this.getCookie('csrftoken');
+    console.log(csrftoken);
+
+    this.state = {isAuthenticated:isAuth, userAuthenticated:usr, message:msg, token:csrftoken };
   };
 
+
+  getCookie = (name) => {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 
   //dado user y pass setea sesion y estado
   login = (username, password) => {
@@ -31,11 +55,29 @@ class AuthExample extends Component {
     this.setState({isAuthenticated:true, userAuthenticated:"pbovina", message:""});
     var d = {isAuthenticated:true, userAuthenticated:"pbovina", message:""};
     sessionStorage.setItem("authData",JSON.stringify(d));
+
+    //post al server
+    var url  = ['/','login/',username,'/'].join("");
+    var axios = require("axios");
+    var token = this.state.token;
+    axios({method: "POST",
+            url: url,
+            data: {user: username, pass: password},
+            headers: {"X-CSRFToken": token}
+        })
+      .then(function (response) {
+        console.log(response);
+        var s_id = this.getCookie("sessionid");
+        this.setState({"s_id":s_id});
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   //dado user y certificado borra sesion y estado
   logout = (username, token) =>{
-    console.log("deslogueamos usuarios");
+    console.log("deslogueamoss usuarios");
     this.setState({isAuthenticated:false, userAuthenticated:""});
     var d = {isAuthenticated:false, userAuthenticated:""};
     sessionStorage.setItem("authData",JSON.stringify(d));
@@ -55,7 +97,7 @@ class AuthExample extends Component {
               <Route path="/:userName/crear_experimento" render = {(props)=>(<CrearExperimento {...props} logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
               <Route path="/:userName/editar_experimento/:idExp" render={(props)=>(<EditarExperimento {...props} logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
               <Route path="/:userName/ver_experimento/:idExp" render={()=>(<VerExperimento logout={this.logout}/>)}/>
-              <Route path="/:userName/lista_de_experimentos" render={()=>(<ListaExperimento logout={this.logout} setMessage={this.setMessage} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
+              <Route path="/:userName/lista_de_experimentos" render={()=>(<ListaExperimento logout={this.logout} setMessage={this.setMessage} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated} s_id={this.state.s_id} token={this.state.token}/>)}/>
               <Route path="/:userName/monitor_de_estado" render={()=>(<MonitorEstado logout={this.logout}/>)}/>
               <Route path="/:userName/procesamiento_de_datos/:idExp" render={()=>(<ProcesamientoDato logout={this.logout}/>)}/>
               <Route path="/:userName/resultado_de_experimentos" render={()=>(<ResultadoExperimento logout={this.logout}/>)}/>
@@ -66,5 +108,5 @@ class AuthExample extends Component {
   }
 
 }
-ReactDOM.render( <AuthExample/> , document.getElementById('root'));
+ReactDOM.render(<AuthExample/>, document.getElementById('root'));
 registerServiceWorker();
