@@ -7,6 +7,10 @@ class GeneralSettings extends Component {
     this.state = props.setup;
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps.setup);
+  }
+
   saveInput = (e) =>{
     const id =  e.target.getAttribute("id");
     const v = e.target.value;
@@ -61,7 +65,7 @@ class GeneralSettings extends Component {
         <option value="hz">Hz</option>
         <option value="mhz">Mhz</option>
       </select>
-    </div> 
+    </div>
     <div class="row"><label for="a_lsb">LSB</label></div>
     <div class="row"><input type="text" class="form-control" id="a_lsb" placeholder="LSB 8-bit" value={this.state.a_lsb} onChange={this.saveInput}/></div>
     <div class="row"><label for="a_msb">MSB</label></div>

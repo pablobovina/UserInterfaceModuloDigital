@@ -6,7 +6,11 @@ import ModalGeneric from './modal_generic.js';
 class ExperimentView extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {"items": props.items};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({"items":nextProps.items});
   }
 
   saveCheckPoint = (id,metadata) =>{
@@ -16,14 +20,10 @@ class ExperimentView extends Component {
   deleteCheckPoint = (id) =>{
     this.props.deleteItem(id);
   }
-  
-  render() {
-    if(!this.props.isAuthenticated){
-      return (<Redirect to="/"/>)
-    }
 
+  render() {
     const res = <ul>
-        {this.props.items.map(item => (
+        {this.state.items.map(item => (
           <ModalGeneric id={item.id} type={item.type} itemMeta={item} saveAction={this.saveCheckPoint} deleteAction={this.deleteCheckPoint}/>
         ))}
       </ul>;

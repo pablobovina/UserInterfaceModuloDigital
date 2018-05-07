@@ -7,33 +7,54 @@ import GeneralSettings from"./general_settings/index.js";
 import ExperimentAdmin from "./experiment_admin/index.js";
 
 class EditarExperimento extends Component {
+
   constructor(props) {
     super(props);
-    this.state = {cpoints:[], settings:{}};
+    this.state = {
+      cpoints:[],
+      settings:{
+        a_bloq:"1",
+        a_ts_unit:"ns",
+        a_freq_unit:"hz",
+        a_times:"0",
+        a_freq:"0",
+        a_lsb:"00000000",
+        a_msb:"00000000",
+        a_name:"",
+        a_description:"",
+        a_ts:"0"
+      },
+      mainState:this.props.mainState,
+      idExp: this.props.match.params.idExp
+    };
+    this.load_data();
+  }
 
-    var url  = ['/',this.props.userAuthenticated,'/experiments/',this.props.match.params.idExp].join("");
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
+  }
+
+
+  load_data = ()=>{
+    var username = this.state.mainState.username;
+    var idExp = this.state.idExp;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+
+    var url  = ['/','user/',username,'/experiments/',idExp].join("");
     var axios = require("axios");
-    axios.get(url)
+    axios({method: "GET",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session}
+        })
     .then((data)=>{
       var d = data.data;
-      this.setState({
-        error:d.error,
-        msg: d.msg,
-        authError:d.authError,
-        cpoints: d.data.cpoints,
-        settings: d.data.settings,
-      });
-
-      if(d.authError)
-      {
-        this.props.setMessage("usuario no autenticado");
-        this.props.logout();
-      }
+      this.setState({cpoints: d.data.cpoints, settings: d.data.settings});
     })
     .catch((err)=>{
       console.log(err);
-      this.props.setMessage("hubo un problema en el servidor");
-      this.props.logout();
+      //this.props.setMessage(err);
+      //this.props.logout();
     });
   }
 
@@ -82,25 +103,25 @@ class EditarExperimento extends Component {
       });
   }
 
-  saveExperiment = (args) => {
-    console.log("gaurdamos data en el server");
+  saveExperiment = (exec) => {
+    const username =  this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
 
-    var url  = ['/',this.props.userAuthenticated,'/experiments'].join("");
+    var url  = ['/','user/',username,'/experiments/'].join("");
     var axios = require("axios");
-    axios.patch(url, this.state)
+    axios({method: "PATCH",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session},
+            data: {"cpoints": this.state.cpoints, "settings": this.state.settings, "execute":exec}
+        })
     .then((data)=>{
-      // diferenciamos un guardar de un guardar-ejecutar
-      if(args.execute){
-        this.setState({isSaved:true, execute:true, experimentSaved:"45a6s4d65as4d6as4"});
-      }else{
-        this.setState({isSaved:true, execute:false, experimentSaved:"45a6s4d65as4d6as4"});
-      }
-
+      var d = data.data;
+      this.setState({isSaved:true, experimentSaved:d.expId, execute: exec});
     })
     .catch((err)=>{
-      console.log(err);
-      // this.props.setMessage("hubo un problema en el servidor");
-      // this.props.logout();
+      //this.props.setMessage("hubo un problema en el servidor");
+      //this.props.logout();
     });
   }
 
@@ -110,35 +131,36 @@ class EditarExperimento extends Component {
 
   render() {
     // si no esta autenticado lo deslogueamos
-    if(!this.props.isAuthenticated){
+    const logued = this.state.mainState.logued;
+    if(!logued){
       return (<Redirect to="/"/>)
     }
 
     //si venimos de una accion guardar-ejecutar exitosa
-    if(this.state.execute){
-      var url  = ["/",this.props.userAuthenticated,"/vista_parcial"].join("");
+    var exec = this.state.execute;
+    if(exec){
+      var username = this.state.mainState.username;
+      var url  = ["/",username,"/vista_parcial"].join("");
       console.log("nos vamos a vista parcial de la ejecucion en curso");
       console.log(url);
       return (<Redirect to={url}/>);
     }
 
     const res = <div>
-                <PanelGeneral logout={this.props.logout} isAuthenticated={this.props.isAuthenticated} userAuthenticated={this.props.userAuthenticated} />
+                <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} />
                 <div class="container-fluid">
                   <div class="row">
                     <div className="col-2">
-                      <GeneralSettings
-                      a_times={this.state.settings.a_times}
-                      saveAction={this.saveSettings} setupSettings={this.state.settings}/>
+                      <GeneralSettings saveAction={this.saveSettings} setupSettings={this.state.settings}/>
                     </div>
                     <div class="col">
                       <h2> Experiment Plan </h2>
-                      <ExperimentAdmin logout={this.props.logout} userAuthenticated={this.props.userAuthenticated}  addButton={this.addCheckPoint}/>
-                      <ExperimentView items={this.state.cpoints} isAuthenticated={this.props.isAuthenticated} saveItem={this.updateCheckPoint} deleteItem={this.deleteCheckPoint}/>
+                      <ExperimentAdmin addButton={this.addCheckPoint}/>
+                      <ExperimentView items={this.state.cpoints} saveItem={this.updateCheckPoint} deleteItem={this.deleteCheckPoint}/>
                     </div>
                   </div>
                 </div>
-                <ActionPanel logout={this.props.logout} userAuthenticated={this.props.userAuthenticated} saveAction={this.saveExperiment}/>
+                <ActionPanel logout={this.props.logout} saveAction={this.saveExperiment}/>
                 </div>;
     return res;
   }

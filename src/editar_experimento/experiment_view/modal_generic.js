@@ -8,6 +8,10 @@ class ModalGeneric extends Component {
     this.state = props.itemMeta;
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps.itemMeta);
+  }
+
   saveInput = (e) =>{
     const id =  e.target.getAttribute("id");
     const v = e.target.value;

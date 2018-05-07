@@ -7,7 +7,11 @@ class ActionPanel extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {"mainState":this.props.mainState};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
   }
 
   setMessage= (msg)=>{
@@ -19,7 +23,6 @@ class ActionPanel extends Component {
   }
 
   render (){
-    const msg = this.state.messagePanel;
     const res =
     <nav className="navbar navbar-expand-lg navbar-light">
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +35,7 @@ class ActionPanel extends Component {
               Edicion
             </a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-               <ViewExperimento logout={this.props.logout} setMessage={this.setMessage} selectedItem={this.props.selectedItem} userAuthenticated={this.props.userAuthenticated}/>
+               <ViewExperimento logout={this.props.logout} setMessage={this.setMessage} selectedItem={this.props.selectedItem} mainState={this.state.mainState}/>
                <a className="dropdown-item" onClick={this.onEdit}>Editar</a>
                <a className="dropdown-item" onClick={this.onDelete}>Eliminar</a>
             </div>

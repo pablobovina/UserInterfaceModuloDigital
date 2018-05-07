@@ -5,19 +5,20 @@ import {Redirect} from 'react-router-dom'
 class SesionInicio extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    console.log(props);
+    this.state = {"mainState":this.props.mainState};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
   }
 
   setUsername = (e) =>{
     e.preventDefault();
-    //console.log(e.target.value);
     this.setState({username: e.target.value});
   }
 
   setPassword = (e) => {
     e.preventDefault();
-    //console.log(e.target.value);
     this.setState({password: e.target.value});
   }
 
@@ -26,14 +27,23 @@ class SesionInicio extends Component {
   }
 
   render() {
-    const msg = this.props.message;
+    var msg = this.state.mainState.message;
+    var error = this.state.mainState.error;
+    var logued = this.state.mainState.logued;
+    var username = this.state.mainState.username;
+
+    if(logued){
+      var url  = [username,'/lista_de_experimentos'].join("");
+      return (<Redirect to={url}/>);
+    }
+
     const res =
     <div className=".container-fluid">
-    <PanelGeneral isAuthenticated={this.props.isAuthenticated} userAuthenticated={this.props.userAuthenticated}/>
+    <PanelGeneral mainState={this.state.mainState}/>
       <div className="row justify-content-center align-items-center">
         <div className="col-3 align-self-center" style={{margin:"50px"}}>
           <div>
-            { msg ? ( <div class="alert alert-warning" role="alert"> {msg} </div>):(<div></div>)}
+            { error ? ( <div class="alert alert-warning" role="alert"> {msg} </div>):(<div></div>)}
             <div className="form-group">
               <label for="exampleInputEmail1">Username</label>
               <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" onChange={this.setUsername}/>
@@ -48,16 +58,6 @@ class SesionInicio extends Component {
         </div>
       </div>
     </div>;
-
-    console.log(this.props.isAuthenticated);
-    if(this.props.isAuthenticated){
-      console.log("usuario autenticado, redireccionamos");
-      console.log(this.props.isAuthenticated);
-      var url  = [this.props.userAuthenticated,'/lista_de_experimentos'].join("");
-      return (<Redirect to={url}/>)
-
-    }
-    console.log("usuario no autenticado, mostramos formulario");
     return res;
   }
 }

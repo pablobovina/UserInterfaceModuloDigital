@@ -7,17 +7,22 @@ class PanelGeneral extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {"mainState":this.props.mainState};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
   }
 
   logout = () =>{
-    console.log("click en logout");
-
     this.props.logout();
   }
 
   render() {
-    if(!this.props.isAuthenticated){
+    const error = this.state.mainState.error;
+    const logued = this.state.mainState.logued;
+    const username = this.state.mainState.username;
+    if(!logued){
       const res =
         <nav className="navbar navbar-dark bg-dark">
           <div className="navbar-brand text-nowrap"><img src={logo} className="App-logo" alt="logo"/> NMR-System Controller</div>
@@ -25,7 +30,7 @@ class PanelGeneral extends Component {
       return res;
     }
 
-    var url_base = "/"+ this.props.userAuthenticated;
+    var url_base = "/"+ username;
     const res =
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="navbar-brand text-nowrap"><img src={logo} className="App-logo" alt="logo"/> NMR-System Controller</div>

@@ -18,11 +18,11 @@ class ActionPanel extends Component {
   }
 
   onSaveClick = (e)=>{
-    this.props.saveAction({execute:false});
+    this.props.saveAction(false);
   }
 
   onSaveAndExecuteClick = (e)=>{
-    this.props.saveAction({execute:true});
+    this.props.saveAction(true);
   }
 
 

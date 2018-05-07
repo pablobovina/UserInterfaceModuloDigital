@@ -3,13 +3,19 @@ import {Redirect, NavLink} from 'react-router-dom';
 import {getFromServer} from '../../intermediate_server/data.js';
 
 class ViewExperimento extends Component {
+
   constructor(props) {
     super(props);
-    this.state = {message:"accion no permitida", url:"#"};
+    this.state = {"mainState":this.props.mainState, message:"accion no permitida", url:"#"};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
   }
 
   setLinkStatus = (e)=>{
-    var url  = ['/',this.props.userAuthenticated,'/experiments/', this.props.selectedItem].join("");
+    var username = this.state.mainState.username;
+    var url  = ['/',username,'/experiments/', this.props.selectedItem].join("");
     getFromServer(url,'get')
     .then((datas) =>{
       this.setState({products: datas.datas, error:datas.error, msg: datas.msg, authError:datas.authError});
@@ -24,7 +30,6 @@ class ViewExperimento extends Component {
   }
 
   render(){
-
     const res = <NavLink
       className = "dropdown-item  disabled"
       to={this.state.url}

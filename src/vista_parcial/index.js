@@ -6,28 +6,33 @@ import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsiv
 class VistaParcial extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {"mainState":this.props.mainState};
     this.getMeasure();
   }
 
-  getMeasure = ()=>{
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
+  }
 
-    var url  = ['/',this.props.userAuthenticated,'/vista_parcial'].join("");
+  getMeasure = ()=>{
+    var username = this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+
+    var url  = ['/','reports/'].join("");
     var axios = require("axios");
-    axios.get(url)
+    axios({method: "GET",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session}
+        })
     .then((data)=>{
       var d = data.data;
       this.setState({dataFromServer:d});
-      if(d.authError)
-      {
-        this.props.setMessage("usuario no autenticado");
-        this.props.logout();
-      }
     })
     .catch((err)=>{
       console.log(err);
-      this.props.setMessage("hubo un problema en el servidor");
-      this.props.logout();
+      //this.props.setMessage("hubo un problema en el servidor");
+      //this.props.logout();
     });
   }
 
@@ -36,12 +41,14 @@ class VistaParcial extends Component {
   }
 
   render() {
-    if(!this.props.isAuthenticated){
+
+    const logued = this.state.mainState.logued;
+    if(!logued){
       return (<Redirect to="/"/>)
     }
 
     const res = <div>
-                  <PanelGeneral logout={this.props.logout} isAuthenticated={this.props.isAuthenticated} userAuthenticated={this.props.userAuthenticated}/>
+                  <PanelGeneral logout={this.props.logout} mainState={this.state.mainState}/>
                   <div className="container-fluid">
                     <div className="row">
                       <div className="col">

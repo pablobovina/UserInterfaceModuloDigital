@@ -4,33 +4,35 @@ import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-a
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 class TablaExperimento extends Component {
-  constructor(props){
-    super(props);
-    this.state = {};
-    var url  = ['/','user/',this.props.userAuthenticated,'/experiments/'].join("");
-    var axios = require("axios");
 
+  constructor(props) {
+    super(props);
+    this.state = {"mainState":this.props.mainState};
+    this.load_data();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
+  }
+
+  load_data = ()=>{
+    const username =  this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+
+    var url  = ['/','user/',username,'/experiments/'].join("");
+
+    var axios = require("axios");
     axios({method: "GET",
             url: url,
-            headers: {"X-CSRFToken": this.props.token, "sessionid": this.props.s_id}
+            headers: {"X-CSRFToken": token, "sessionid":session}
         })
     .then((data)=>{
-      console.log(data);
-      console.log(data.data.datas);
       var d = data.data;
       this.setState({products: d.datas, error:d.error, msg: d.msg, authError:d.authError});
-
-      if(d.authError)
-      {
-        this.props.setMessage("usuario no autenticado");
-        this.props.logout();
-      }
-
-
     })
     .catch((err)=>{
-      console.log(err);
-      this.props.setMessage("hubo un problema en el servidor");
+      this.props.setMessage(err);
       this.props.logout();
     });
   }
@@ -52,6 +54,12 @@ class TablaExperimento extends Component {
   }
 
   render() {
+
+    const logued = this.state.mainState.logued;
+    if(!logued){
+      return (<Redirect to="/"/>)
+    }
+
     const options = {
       sizePerPage: 10,
       hideSizePerPage: true

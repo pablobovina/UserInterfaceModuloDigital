@@ -10,7 +10,7 @@ class CrearExperimento extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cpoints:[], 
+      cpoints:[],
       settings:{
         a_bloq:"1",
         a_ts_unit:"ns",
@@ -22,8 +22,13 @@ class CrearExperimento extends Component {
         a_name:"",
         a_description:"",
         a_ts:"0"
-      }
+      },
+      mainState:this.props.mainState
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({"mainState":nextProps.mainState});
   }
 
   getIndexByKeyId(a,i){
@@ -56,8 +61,10 @@ class CrearExperimento extends Component {
 
   deleteCheckPoint = (id)=>{
       this.setState((prevState) => {
+          console.log(prevState.cpoints);
           var index = this.getIndexByKeyId(prevState.cpoints, id);
           prevState.cpoints.splice(index,1);
+          console.log(prevState.cpoints);
           return {cpoints: prevState.cpoints};
         });
   }
@@ -72,31 +79,24 @@ class CrearExperimento extends Component {
   }
 
   saveExperiment = () => {
-    console.log("gaurdamos data en el server");
-    console.log(this.state);
-    var url  = ['/',this.props.userAuthenticated,'/experiments'].join("");
+    const username =  this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+
+    var url  = ['/','user/',username,'/experiments/'].join("");
     var axios = require("axios");
-    axios.patch(url, this.state)
+    axios({method: "POST",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session},
+            data: {"cpoints": this.state.cpoints, "settings": this.state.settings}
+        })
     .then((data)=>{
-      console.log(data);
-      console.log(data.data.datas);
-      // var d = data.data;
-      // this.setState({products: d.datas, error:d.error, msg: d.msg, authError:d.authError});
-
-      // if(d.authError)
-      // {
-      //   this.props.setMessage("usuario no autenticado");
-      //   this.props.logout();
-      // }
-
-      // indicamos que esta gaurdado y que continua la edicion con id especificado
-      this.setState({isSaved:true, experimentSaved:"45a6s4d65as4d6as4"});
-
+      var d = data.data;
+      this.setState({isSaved:true, experimentSaved:d.expId});
     })
     .catch((err)=>{
-      console.log(err);
-      // this.props.setMessage("hubo un problema en el servidor");
-      // this.props.logout();
+      //this.props.setMessage("hubo un problema en el servidor");
+      //this.props.logout();
     });
   }
 
@@ -106,20 +106,19 @@ class CrearExperimento extends Component {
 
   render() {
     // si no esta autenticado lo deslogueamos
-    if(!this.props.isAuthenticated){
+    const logued = this.state.mainState.logued
+    if(!logued){
       return (<Redirect to="/"/>)
     }
 
     //si el experimento fue guardamos vamos a vista de edicion
     if(this.state.isSaved){
       var url  = ["editar_experimento/",this.state.experimentSaved].join("");
-      console.log("nos vamos a edicion");
-      console.log(url);
       return (<Redirect to={url}/>);
-    }   
+    }
 
     const res = <div>
-                <PanelGeneral logout={this.props.logout} isAuthenticated={this.props.isAuthenticated} userAuthenticated={this.props.userAuthenticated} />
+                <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} />
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-2">
@@ -127,12 +126,12 @@ class CrearExperimento extends Component {
                     </div>
                     <div class="col">
                       <h2> Experiment Plan </h2>
-                      <ExperimentAdmin logout={this.props.logout} userAuthenticated={this.props.userAuthenticated}  addButton={this.addCheckPoint}/> 
-                      <ExperimentView items={this.state.cpoints} isAuthenticated={this.props.isAuthenticated} saveItem={this.updateCheckPoint} deleteItem={this.deleteCheckPoint}/>
+                      <ExperimentAdmin addButton={this.addCheckPoint}/>
+                      <ExperimentView  items={this.state.cpoints} saveItem={this.updateCheckPoint} deleteItem={this.deleteCheckPoint}/>
                     </div>
                   </div>
                 </div>
-                <ActionPanel logout={this.props.logout} userAuthenticated={this.props.userAuthenticated} saveAction={this.saveExperiment}/>
+                <ActionPanel saveAction={this.saveExperiment}/>
                 </div>;
     return res;
   }

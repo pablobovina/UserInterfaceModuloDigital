@@ -14,24 +14,13 @@ import VerExperimento from './ver_experimento/index.js';
 
 
 class AuthExample extends Component {
+
   constructor(props) {
     super(props);
-    var d = JSON.parse(sessionStorage.getItem("authData"));
-    console.log("buscamos data del session storage")
-    console.log(d);
-    var usr = d!=null && d.userAuthenticated ? d.userAuthenticated : "";
-    var isAuth = d!=null && d.isAuthenticated ? d.isAuthenticated : false;
-    var msg = d!=null && d.message ? d.message : "";
-
-    var allCookies = document.cookie;
-    console.log(allCookies);
-
-    var csrftoken = this.getCookie('csrftoken');
-    console.log(csrftoken);
-
-    this.state = {isAuthenticated:isAuth, userAuthenticated:usr, message:msg, token:csrftoken };
+    var token = this.getCookie('csrftoken');
+    var session = this.getCookie('sessionid');
+    this.state = {"error":false, "message":"", "logued":false, "token":token, "session": session};
   };
-
 
   getCookie = (name) => {
         var cookieValue = null;
@@ -49,15 +38,10 @@ class AuthExample extends Component {
         return cookieValue;
     }
 
-  //dado user y pass setea sesion y estado
   login = (username, password) => {
-    console.log("logueamos usuarios");
-    this.setState({isAuthenticated:true, userAuthenticated:"pbovina", message:""});
-    var d = {isAuthenticated:true, userAuthenticated:"pbovina", message:""};
-    sessionStorage.setItem("authData",JSON.stringify(d));
-
-    //post al server
-    var url  = ['/','login/',username,'/'].join("");
+    username = "w";
+    password = "w1234567";
+    var url  = ['/','login/',username].join("");
     var axios = require("axios");
     var token = this.state.token;
     axios({method: "POST",
@@ -65,43 +49,51 @@ class AuthExample extends Component {
             data: {user: username, pass: password},
             headers: {"X-CSRFToken": token}
         })
-      .then(function (response) {
-        console.log(response);
-        var s_id = this.getCookie("sessionid");
-        this.setState({"s_id":s_id});
+      .then(response => {
+        var token = this.getCookie('csrftoken');
+        var session = this.getCookie('sessionid');
+        this.setState({"error":false, "username": username, "logued":true, "token":token, "session": session});
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch(error =>{
+        this.setState({"message":error, "error": true, "logued":false});
       });
   }
 
   //dado user y certificado borra sesion y estado
-  logout = (username, token) =>{
-    console.log("deslogueamoss usuarios");
-    this.setState({isAuthenticated:false, userAuthenticated:""});
-    var d = {isAuthenticated:false, userAuthenticated:""};
-    sessionStorage.setItem("authData",JSON.stringify(d));
+  logout = () =>{
+    //post al server
+    var url  = ['/','logout/', this.state.username,"/logout"].join("");
+    var axios = require("axios");
+    var token = this.state.token;
+    var session = this.state.session;
+    axios({method: "POST",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session}
+        })
+      .then(response => {
+        this.setState({"error":false, "logued":false});
+      })
+      .catch(error => {
+        this.setState({"message":error, "error":true, "logued":false});
+      });
   }
 
-  setMessage = (msg) =>{
-    var d = JSON.parse(sessionStorage.getItem("authData"));
-    if(d) d.message = msg;
-    sessionStorage.setItem("authData",JSON.stringify(d));
-    this.setState({message:msg});
+  setMessage = (m) =>{
+    this.setState({"message":m});
   }
 
   render () {
     const res = <Router>
               <div>
-              <Route exact path="/" render = {()=>(<SesionInicio login={this.login} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
-              <Route path="/:userName/crear_experimento" render = {(props)=>(<CrearExperimento {...props} logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
-              <Route path="/:userName/editar_experimento/:idExp" render={(props)=>(<EditarExperimento {...props} logout={this.logout} message={this.state.message} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
+              <Route exact path="/" render = {(props)=>(<SesionInicio {...props} login={this.login} mainState={this.state}/>)}/>
+              <Route path="/:userName/crear_experimento" render = {(props)=>(<CrearExperimento {...props} mainState={this.state} logout={this.logout} setMessage={this.setMessage}/>)}/>
+              <Route path="/:userName/editar_experimento/:idExp" render={(props)=>(<EditarExperimento {...props} logout={this.logout} mainState={this.state}/>)}/>
               <Route path="/:userName/ver_experimento/:idExp" render={()=>(<VerExperimento logout={this.logout}/>)}/>
-              <Route path="/:userName/lista_de_experimentos" render={()=>(<ListaExperimento logout={this.logout} setMessage={this.setMessage} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated} s_id={this.state.s_id} token={this.state.token}/>)}/>
+              <Route path="/:userName/lista_de_experimentos" render={(props)=>(<ListaExperimento {...props}  mainState={this.state} logout={this.logout} setMessage={this.setMessage}/>)}/>
               <Route path="/:userName/monitor_de_estado" render={()=>(<MonitorEstado logout={this.logout}/>)}/>
               <Route path="/:userName/procesamiento_de_datos/:idExp" render={()=>(<ProcesamientoDato logout={this.logout}/>)}/>
               <Route path="/:userName/resultado_de_experimentos" render={()=>(<ResultadoExperimento logout={this.logout}/>)}/>
-              <Route path="/:userName/vista_parcial" render={()=>(<VistaParcial logout={this.logout} isAuthenticated={this.state.isAuthenticated} userAuthenticated={this.state.userAuthenticated}/>)}/>
+              <Route path="/:userName/vista_parcial" render={(props)=>(<VistaParcial {...props} logout={this.logout} mainState={this.state}/>)}/>
               </div>
             </Router>;
     return res;
