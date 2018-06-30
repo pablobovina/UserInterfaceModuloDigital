@@ -22,7 +22,8 @@ class EditarExperimento extends Component {
         a_msb:"00000000",
         a_name:"",
         a_description:"",
-        a_ts:"0"
+        a_ts:"0",
+        a_channel:"3"
       },
       mainState:this.props.mainState,
       idExp: this.props.match.params.idExp
@@ -107,8 +108,8 @@ class EditarExperimento extends Component {
     const username =  this.state.mainState.username;
     const session = this.state.mainState.session;
     const token =  this.state.mainState.token;
-
-    var url  = ['/','user/',username,'/experiments/'].join("");
+    const idExp  = this.state.idExp;
+    var url  = ['/','user/',username,'/experiments/',idExp].join("");
     var axios = require("axios");
     axios({method: "PATCH",
             url: url,
@@ -117,12 +118,32 @@ class EditarExperimento extends Component {
         })
     .then((data)=>{
       var d = data.data;
-      this.setState({isSaved:true, experimentSaved:d.expId, execute: exec});
+      this.setState({isSaved:true, experimentSaved:d.expId});
     })
     .catch((err)=>{
       //this.props.setMessage("hubo un problema en el servidor");
       //this.props.logout();
     });
+
+    //ejecucion
+    if(exec){
+      var url  = ['/','user/',username,'/executor/',idExp,"/run"].join("");
+      var axios = require("axios");
+      axios({method: "GET",
+              url: url,
+              headers: {"X-CSRFToken": token, "sessionid":session},
+              data:{}
+          })
+      .then((data)=>{
+        var d = data.data;
+        this.setState({execute: exec});
+      })
+      .catch((err)=>{
+        //this.props.setMessage("hubo un problema en el servidor");
+        //this.props.logout();
+      });
+    }
+
   }
 
   saveSettings = (newSettings) => {

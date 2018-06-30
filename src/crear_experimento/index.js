@@ -21,7 +21,8 @@ class CrearExperimento extends Component {
         a_msb:"00000000",
         a_name:"",
         a_description:"",
-        a_ts:"0"
+        a_ts:"0",
+        a_channel:"3"
       },
       mainState:this.props.mainState
     };
@@ -92,6 +93,7 @@ class CrearExperimento extends Component {
         })
     .then((data)=>{
       var d = data.data;
+      console.log(data)
       this.setState({isSaved:true, experimentSaved:d.expId});
     })
     .catch((err)=>{

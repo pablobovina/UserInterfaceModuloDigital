@@ -70,6 +70,8 @@ class GeneralSettings extends Component {
     <div class="row"><input type="text" class="form-control" id="a_lsb" placeholder="LSB 8-bit" value={this.state.a_lsb} onChange={this.saveInput}/></div>
     <div class="row"><label for="a_msb">MSB</label></div>
     <div class="row"><input type="text" class="form-control" id="a_msb" placeholder="MSB 8-bit" value={this.state.a_msb} onChange={this.saveInput}/></div>
+    <div class="row"><label for="a_channel">CHANNEL</label></div>
+    <div class="row"><input type="text" class="form-control" id="a_achannel" placeholder="3" value={this.state.a_channel} onChange={this.saveInput}/></div>
     </form>;
     return res;
   }
