@@ -22,7 +22,39 @@ class ActionPanel extends Component {
     this.setState({messagePanel: ""});
   }
 
+  onEdit = () =>{
+    this.setState({editClick: true});
+  }
+
+  onStartExec= () =>{
+    const username =  this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+    const idExp  = this.props.selectedItem;
+    var url  = ['/','user/',username,'/executor/',idExp,"/run"].join("");
+    var axios = require("axios");
+    axios({method: "GET",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session},
+            data:{}
+        })
+    .then((data)=>{
+      var d = data.data;
+      this.setState({onStartExec: true});
+    })
+    .catch((err)=>{
+      //this.props.setMessage("hubo un problema en el servidor");
+      //this.props.logout();
+    });
+
+  }
+
   render (){
+    if(this.props.selectedItem && this.state.editClick){
+      var url  = ["editar_experimento/",this.props.selectedItem].join("");
+      return (<Redirect to={url}/>);
+    }
+
     const res =
     <nav className="navbar navbar-expand-lg navbar-light">
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +77,7 @@ class ActionPanel extends Component {
              Ejecucion
            </a>
            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-             <a className="dropdown-item" onClick={this.onEdit}>Iniciar ejecucion</a>
+             <a className="dropdown-item" onClick={this.onStartExec}>Iniciar ejecucion</a>
              <a className="dropdown-item" onClick={this.onDelete}>Cancelar ejecucion</a>
            </div>
           </li>
