@@ -23,7 +23,8 @@ class EditarExperimento extends Component {
         a_name:"",
         a_description:"",
         a_ts:"0",
-        a_channel:"3"
+        a_channel:"3",
+        a_phase:"0"
       },
       mainState:this.props.mainState,
       idExp: this.props.match.params.idExp

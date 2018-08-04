@@ -66,6 +66,8 @@ class GeneralSettings extends Component {
         <option value="mhz">Mhz</option>
       </select>
     </div>
+    <div class="row"><label for="a_phase">Phase</label></div>
+    <div class="row"><input type="text" class="form-control" id="a_phase" placeholder="Phase" value={this.state.a_phase} onChange={this.saveInput}/></div>
     <div class="row"><label for="a_lsb">LSB</label></div>
     <div class="row"><input type="text" class="form-control" id="a_lsb" placeholder="LSB 8-bit" value={this.state.a_lsb} onChange={this.saveInput}/></div>
     <div class="row"><label for="a_msb">MSB</label></div>
