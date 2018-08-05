@@ -5,6 +5,7 @@ import ActionPanel from "./action_panel/index.js";
 import ExperimentView from "./experiment_view/index.js";
 import GeneralSettings from"./general_settings/index.js";
 import ExperimentAdmin from "./experiment_admin/index.js";
+import NotificationArea from "./notification.js";
 
 class EditarExperimento extends Component {
 
@@ -27,7 +28,8 @@ class EditarExperimento extends Component {
         a_phase:"0"
       },
       mainState:this.props.mainState,
-      idExp: this.props.match.params.idExp
+      idExp: this.props.match.params.idExp,
+      errormessage:""
     };
     this.load_data();
   }
@@ -35,7 +37,6 @@ class EditarExperimento extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({"mainState":nextProps.mainState});
   }
-
 
   load_data = ()=>{
     var username = this.state.mainState.username;
@@ -142,6 +143,10 @@ class EditarExperimento extends Component {
       .catch((err)=>{
         //this.props.setMessage("hubo un problema en el servidor");
         //this.props.logout();
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+        this.setState({errormessage: err.response.data[0]});
       });
     }
 
@@ -150,6 +155,11 @@ class EditarExperimento extends Component {
   saveSettings = (newSettings) => {
     this.setState({settings:newSettings});
   }
+
+  cleanMessage= (msg)=>{
+    this.setState({errormessage: ""});
+  }
+
 
   render() {
     // si no esta autenticado lo deslogueamos
@@ -170,6 +180,7 @@ class EditarExperimento extends Component {
 
     const res = <div>
                 <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} />
+                <NotificationArea message={this.state.errormessage} clean={this.cleanMessage}/>
                 <div class="container-fluid">
                   <div class="row">
                     <div className="col-2">

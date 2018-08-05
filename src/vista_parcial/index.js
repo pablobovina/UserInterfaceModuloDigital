@@ -37,7 +37,7 @@ class VistaParcial extends Component {
   }
 
   componentDidMount() {
-      setInterval(()=>{this.getMeasure();console.log("actualizamos grafico")}, 10000)
+      //setInterval(()=>{this.getMeasure();console.log("actualizamos grafico")}, 10000)
   }
 
   render() {
