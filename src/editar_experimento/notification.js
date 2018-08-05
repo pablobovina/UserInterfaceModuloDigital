@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import "./notification.css";
 
 class NotificationArea extends Component {
   constructor(props){
@@ -15,7 +16,11 @@ class NotificationArea extends Component {
     //console.log(octicons.alert.toSVG());
     console.log(this.state.message);
     var d = {__html: octicons.alert.toSVG()};
-    return <div onClick={this.props.clean}><div dangerouslySetInnerHTML={d} /><div>{this.state.message}</div></div>;
+    //return <div className="bar" onClick={this.props.clean}><div dangerouslySetInnerHTML={d}/><div>{this.state.message}</div></div>;
+    if(this.state.message){
+        return <div className="bar" onClick={this.props.clean}>&#9889; {this.state.message}</div>;
+    }
+    return <div></div>
   }
 }
 
