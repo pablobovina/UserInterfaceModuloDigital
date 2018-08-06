@@ -5,6 +5,7 @@ import ActionPanel from "./action_panel/index.js";
 import ExperimentView from "./experiment_view/index.js";
 import GeneralSettings from"./general_settings/index.js";
 import ExperimentAdmin from "./experiment_admin/index.js";
+import NotificationArea from "../notification_area/notification.js";
 
 class CrearExperimento extends Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class CrearExperimento extends Component {
         a_channel:"3",
         a_phase:"0"
       },
-      mainState:this.props.mainState
+      mainState:this.props.mainState,
+      errormessage:""
     };
   }
 
@@ -100,11 +102,19 @@ class CrearExperimento extends Component {
     .catch((err)=>{
       //this.props.setMessage("hubo un problema en el servidor");
       //this.props.logout();
+      console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+      this.setState({errormessage: err.response.data});
     });
   }
 
   saveSettings = (newSettings) => {
     this.setState({settings:newSettings});
+  }
+
+  cleanMessage= (msg)=>{
+    this.setState({errormessage: ""});
   }
 
   render() {
@@ -122,6 +132,7 @@ class CrearExperimento extends Component {
 
     const res = <div>
                 <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} />
+                <NotificationArea message={this.state.errormessage} clean={this.cleanMessage}/>
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-2">
