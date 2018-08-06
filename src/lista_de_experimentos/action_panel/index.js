@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Redirect, NavLink} from 'react-router-dom';
-import NotificationArea from "./notification.js";
 import ViewExperimento from "./view.js";
 
 class ActionPanel extends Component {
@@ -16,10 +15,6 @@ class ActionPanel extends Component {
 
   setMessage= (msg)=>{
     this.setState({messagePanel: msg});
-  }
-
-  cleanMessage= (msg)=>{
-    this.setState({messagePanel: ""});
   }
 
   onEdit = () =>{
@@ -43,7 +38,7 @@ class ActionPanel extends Component {
       this.setState({onStartExec: true});
     })
     .catch((err)=>{
-      //this.props.setMessage("hubo un problema en el servidor");
+      this.props.setMessage(err.response.data);
       //this.props.logout();
     });
 
@@ -92,7 +87,6 @@ class ActionPanel extends Component {
           </li>
         </ul>
       </div>
-      <NotificationArea message={this.state.messagePanel} clean={this.cleanMessage}/>
       </nav>;
 
     return res;

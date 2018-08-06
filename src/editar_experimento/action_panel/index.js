@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
 import {Redirect, NavLink} from 'react-router-dom';
-import NotificationArea from "./notification.js";
 
 class ActionPanel extends Component {
 
   constructor(props) {
     super(props);
     this.state = {};
-  }
-
-  setMessage= (msg)=>{
-    this.setState({messagePanel: msg});
-  }
-
-  cleanMessage= (msg)=>{
-    this.setState({messagePanel: ""});
   }
 
   onSaveClick = (e)=>{
@@ -27,7 +18,6 @@ class ActionPanel extends Component {
 
 
   render (){
-    const msg = this.state.messagePanel;
     const res =
     <nav className="navbar navbar-expand-lg navbar-light">
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +31,6 @@ class ActionPanel extends Component {
           </li>
         </ul>
       </div>
-      <NotificationArea message={this.state.messagePanel} clean={this.cleanMessage}/>
       </nav>;
 
     return res;

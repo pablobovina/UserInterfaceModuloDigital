@@ -5,7 +5,7 @@ import ActionPanel from "./action_panel/index.js";
 import ExperimentView from "./experiment_view/index.js";
 import GeneralSettings from"./general_settings/index.js";
 import ExperimentAdmin from "./experiment_admin/index.js";
-import NotificationArea from "./notification.js";
+import NotificationArea from "../notification_area/notification.js";
 
 class EditarExperimento extends Component {
 
@@ -146,7 +146,7 @@ class EditarExperimento extends Component {
         console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
-        this.setState({errormessage: err.response.data[0]});
+        this.setState({errormessage: err.response.data});
       });
     }
 
@@ -159,7 +159,6 @@ class EditarExperimento extends Component {
   cleanMessage= (msg)=>{
     this.setState({errormessage: ""});
   }
-
 
   render() {
     // si no esta autenticado lo deslogueamos
