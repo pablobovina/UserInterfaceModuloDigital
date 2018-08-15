@@ -106,15 +106,12 @@ class CrearExperimento extends Component {
       console.log(err.response.status);
       console.log(err.response.headers);
       this.setState({errormessage: err.response.data});
+      this.props.setMessage(err.response.data);
     });
   }
 
   saveSettings = (newSettings) => {
     this.setState({settings:newSettings});
-  }
-
-  cleanMessage= (msg)=>{
-    this.setState({errormessage: ""});
   }
 
   render() {
@@ -132,7 +129,7 @@ class CrearExperimento extends Component {
 
     const res = <div>
                 <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} />
-                <NotificationArea message={this.state.errormessage} clean={this.cleanMessage}/>
+                <NotificationArea message={this.props.mainState.message} setMessage={this.props.setMessage}/>
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-2">

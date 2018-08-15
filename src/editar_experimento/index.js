@@ -56,7 +56,7 @@ class EditarExperimento extends Component {
     })
     .catch((err)=>{
       console.log(err);
-      //this.props.setMessage(err);
+      this.props.setMessage(err.response.data);
       //this.props.logout();
     });
   }
@@ -123,7 +123,7 @@ class EditarExperimento extends Component {
       this.setState({isSaved:true, experimentSaved:d.expId});
     })
     .catch((err)=>{
-      //this.props.setMessage("hubo un problema en el servidor");
+      this.props.setMessage(err.response.data);
       //this.props.logout();
     });
 
@@ -141,7 +141,7 @@ class EditarExperimento extends Component {
         this.setState({execute: exec});
       })
       .catch((err)=>{
-        //this.props.setMessage("hubo un problema en el servidor");
+        this.props.setMessage(err.response.data);
         //this.props.logout();
         console.log(err.response.data);
         console.log(err.response.status);
@@ -179,7 +179,7 @@ class EditarExperimento extends Component {
 
     const res = <div>
                 <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} />
-                <NotificationArea message={this.state.errormessage} clean={this.cleanMessage}/>
+                <NotificationArea message={this.props.mainState.message} setMessage={this.props.setMessage}/>
                 <div class="container-fluid">
                   <div class="row">
                     <div className="col-2">

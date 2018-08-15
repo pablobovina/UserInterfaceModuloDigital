@@ -52,7 +52,8 @@ class AuthExample extends Component {
       .then(response => {
         var token = this.getCookie('csrftoken');
         var session = this.getCookie('sessionid');
-        this.setState({"error":false, "username": username, "logued":true, "token":token, "session": session});
+        this.setState({"error":false, "username": username, "logued":true, 
+          "token":token, "session": session});
       })
       .catch(error =>{
         this.setState({"message":error, "error": true, "logued":false});
@@ -80,20 +81,42 @@ class AuthExample extends Component {
 
   setMessage = (m) =>{
     this.setState({"message":m});
+    console.log("seteo de mensaje a "+m);
   }
 
   render () {
     const res = <Router>
               <div>
-              <Route exact path="/" render = {(props)=>(<SesionInicio {...props} login={this.login} mainState={this.state}/>)}/>
-              <Route path="/:userName/crear_experimento" render = {(props)=>(<CrearExperimento {...props} mainState={this.state} logout={this.logout} setMessage={this.setMessage}/>)}/>
-              <Route path="/:userName/editar_experimento/:idExp" render={(props)=>(<EditarExperimento {...props} logout={this.logout} mainState={this.state}/>)}/>
-              <Route path="/:userName/ver_experimento/:idExp" render={()=>(<VerExperimento logout={this.logout}/>)}/>
-              <Route path="/:userName/lista_de_experimentos" render={(props)=>(<ListaExperimento {...props}  mainState={this.state} logout={this.logout} setMessage={this.setMessage}/>)}/>
-              <Route path="/:userName/monitor_de_estado" render={()=>(<MonitorEstado logout={this.logout}/>)}/>
-              <Route path="/:userName/procesamiento_de_datos/:idExp" render={()=>(<ProcesamientoDato logout={this.logout}/>)}/>
-              <Route path="/:userName/resultado_de_experimentos" render={()=>(<ResultadoExperimento logout={this.logout}/>)}/>
-              <Route path="/:userName/vista_parcial" render={(props)=>(<VistaParcial {...props} logout={this.logout} mainState={this.state}/>)}/>
+              <Route exact path="/" render = {(props)=>(
+                <SesionInicio {...props} login={this.login} mainState={this.state}/>)}/>
+
+              <Route path="/:userName/crear_experimento" render = {(props)=>(
+                <CrearExperimento {...props} mainState={this.state} logout={this.logout} 
+                  setMessage={this.setMessage}/>)}/>
+              
+              <Route path="/:userName/editar_experimento/:idExp" render={(props)=>(
+                <EditarExperimento {...props} logout={this.logout} mainState={this.state} 
+                  setMessage={this.setMessage}/>)}/>
+              
+              <Route path="/:userName/ver_experimento/:idExp" render={()=>(
+                <VerExperimento logout={this.logout}/>)}/>
+              
+              <Route path="/:userName/lista_de_experimentos" render={(props)=>(
+                <ListaExperimento {...props}  mainState={this.state} logout={this.logout} 
+                  setMessage={this.setMessage}/>)}/>
+              
+              <Route path="/:userName/monitor_de_estado" render={()=>(
+                <MonitorEstado logout={this.logout}/>)}/>
+              
+              <Route path="/:userName/procesamiento_de_datos/:idExp" render={()=>(
+                <ProcesamientoDato logout={this.logout}/>)}/>
+              
+              <Route path="/:userName/resultado_de_experimentos" render={()=>(
+                <ResultadoExperimento logout={this.logout}/>)}/>
+              
+              <Route path="/:userName/vista_parcial" render={(props)=>(
+                <VistaParcial {...props} logout={this.logout} mainState={this.state} 
+                  setMessage={this.setMessage}/>)}/>
               </div>
             </Router>;
     return res;

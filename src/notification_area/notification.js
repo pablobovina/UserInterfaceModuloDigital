@@ -4,21 +4,20 @@ import "./notification.css";
 class NotificationArea extends Component {
   constructor(props){
     super(props);
-    this.state = {"message": this.props.message};
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({"message": this.props.message});
+  clean = ()=>{
+    this.props.setMessage("");
   }
 
   render() {
     var octicons = require("octicons");
     //console.log(octicons.alert.toSVG());
-    console.log(this.state.message);
+    console.log(this.props.message);
     var d = {__html: octicons.alert.toSVG()};
     //return <div className="bar" onClick={this.props.clean}><div dangerouslySetInnerHTML={d}/><div>{this.state.message}</div></div>;
-    if(this.state.message){
-        return <div className="bar" onClick={this.props.clean}>&#9889; {this.state.message[0]}</div>;
+    if(this.props.message){
+        return <div className="bar" onClick={this.clean}>&#9889; {this.props.message[0]}</div>;
     }
     return <div></div>
   }
