@@ -20,6 +20,12 @@ class ListaExperimento extends Component {
   }
 
   render() {
+    
+    var username = this.state.mainState.username;
+    if(username == ""){
+      return (<Redirect to="/"/>);
+    }
+
     const res = <div>
                 <PanelGeneral mainState={this.state.mainState} logout={this.props.logout}  />
                 <NotificationArea message={this.props.mainState.message} setMessage={this.props.setMessage}/>

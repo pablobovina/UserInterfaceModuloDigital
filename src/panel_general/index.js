@@ -20,9 +20,8 @@ class PanelGeneral extends Component {
 
   render() {
     const error = this.state.mainState.error;
-    const logued = this.state.mainState.logued;
     const username = this.state.mainState.username;
-    if(!logued){
+    if(username == ""){
       const res =
         <nav className="navbar navbar-dark bg-dark">
           <div className="navbar-brand text-nowrap"><img src={logo} className="App-logo" alt="logo"/> NMR-System Controller</div>

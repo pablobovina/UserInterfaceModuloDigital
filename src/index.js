@@ -19,9 +19,19 @@ class AuthExample extends Component {
     super(props);
     var token = this.getCookie('csrftoken');
     var session = this.getCookie('sessionid');
-    this.state = {"error":false, "message":"", "logued":false, "token":token, "session": session};
+    var newState = {"error":false, "message":"", "token":token, "session": session, "username":""};
+    
+    var storageState = sessionStorage.getItem("mainState");
+    if(storageState){
+      var storedState = JSON.parse(storageState)
+      this.state = storedState;
+      console.log("restauramos estado del session storage")
+    }else{
+      this.state = newState;
+      console.log("estado por defecto");
+    }
   };
-
+  
   getCookie = (name) => {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -36,7 +46,7 @@ class AuthExample extends Component {
             }
         }
         return cookieValue;
-    }
+  }
 
   login = (username, password) => {
     username = "w";
@@ -52,11 +62,16 @@ class AuthExample extends Component {
       .then(response => {
         var token = this.getCookie('csrftoken');
         var session = this.getCookie('sessionid');
-        this.setState({"error":false, "username": username, "logued":true, 
-          "token":token, "session": session});
+        var newState = {
+          "error":false, 
+          "username": username,
+          "token":token, 
+          "session": session};
+          sessionStorage.setItem("mainState", JSON.stringify(newState));
+          this.setState(newState);        
       })
       .catch(error =>{
-        this.setState({"message":error, "error": true, "logued":false});
+        this.setState({"error": true, "message":error.response.data});
       });
   }
 
@@ -72,16 +87,20 @@ class AuthExample extends Component {
             headers: {"X-CSRFToken": token, "sessionid":session}
         })
       .then(response => {
-        this.setState({"error":false, "logued":false});
       })
       .catch(error => {
-        this.setState({"message":error, "error":true, "logued":false});
       });
+      var newState = {"error":false, "message":"", "token":"", "session": "", "username":""};
+      this.setState(newState);
+      sessionStorage.removeItem("mainState");
   }
 
   setMessage = (m) =>{
+    var newState = this.state;
+    newState.message = m;
     this.setState({"message":m});
-    console.log("seteo de mensaje a "+m);
+    sessionStorage.setItem("mainState", JSON.stringify(newState));
+    console.log("seteo de mensaje a " + m);
   }
 
   render () {

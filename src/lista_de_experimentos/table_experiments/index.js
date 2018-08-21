@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Redirect, NavLink} from 'react-router-dom';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
@@ -54,11 +53,6 @@ class TablaExperimento extends Component {
   }
 
   render() {
-
-    const logued = this.state.mainState.logued;
-    if(!logued){
-      return (<Redirect to="/"/>)
-    }
 
     const options = {
       sizePerPage: 10,

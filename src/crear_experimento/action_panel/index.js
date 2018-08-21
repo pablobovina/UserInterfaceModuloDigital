@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Redirect, NavLink} from 'react-router-dom';
 
 class ActionPanel extends Component {
 

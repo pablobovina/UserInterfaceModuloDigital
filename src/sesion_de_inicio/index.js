@@ -29,10 +29,9 @@ class SesionInicio extends Component {
   render() {
     var msg = this.state.mainState.message;
     var error = this.state.mainState.error;
-    var logued = this.state.mainState.logued;
     var username = this.state.mainState.username;
 
-    if(logued){
+    if(username != ""){
       var url  = [username,'/lista_de_experimentos'].join("");
       return (<Redirect to={url}/>);
     }

@@ -115,10 +115,10 @@ class CrearExperimento extends Component {
   }
 
   render() {
-    // si no esta autenticado lo deslogueamos
-    const logued = this.state.mainState.logued
-    if(!logued){
-      return (<Redirect to="/"/>)
+    
+    var username = this.state.mainState.username;
+    if(username == ""){
+      return (<Redirect to="/"/>);
     }
 
     //si el experimento fue guardamos vamos a vista de edicion

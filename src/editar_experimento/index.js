@@ -161,10 +161,9 @@ class EditarExperimento extends Component {
   }
 
   render() {
-    // si no esta autenticado lo deslogueamos
-    const logued = this.state.mainState.logued;
-    if(!logued){
-      return (<Redirect to="/"/>)
+    var username = this.state.mainState.username;
+    if(username == ""){
+      return (<Redirect to="/"/>);
     }
 
     //si venimos de una accion guardar-ejecutar exitosa

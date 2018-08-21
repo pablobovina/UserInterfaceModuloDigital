@@ -31,7 +31,7 @@ class VistaParcial extends Component {
     })
     .catch((err)=>{
       console.log(err);
-      //this.props.setMessage("hubo un problema en el servidor");
+      this.props.setMessage(err.response.data);
       //this.props.logout();
     });
   }
@@ -42,9 +42,9 @@ class VistaParcial extends Component {
 
   render() {
 
-    const logued = this.state.mainState.logued;
-    if(!logued){
-      return (<Redirect to="/"/>)
+    var username = this.state.mainState.username;
+    if(username == ""){
+      return (<Redirect to="/"/>);
     }
 
     const res = <div>
