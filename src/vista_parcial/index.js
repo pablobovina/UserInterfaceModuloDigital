@@ -19,7 +19,7 @@ class VistaParcial extends Component {
     const session = this.state.mainState.session;
     const token =  this.state.mainState.token;
 
-    var url  = ['/','reports/'].join("");
+    var url  = ['/','reports/', username, "/", "99999", "/", "rep"].join("");
     var axios = require("axios");
     axios({method: "GET",
             url: url,

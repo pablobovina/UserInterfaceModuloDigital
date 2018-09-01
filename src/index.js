@@ -49,8 +49,8 @@ class AuthExample extends Component {
   }
 
   login = (username, password) => {
-    username = "w";
-    password = "w1234567";
+    //username = "w";
+    //password = "w1234567";
     var url  = ['/','login/',username].join("");
     var axios = require("axios");
     var token = this.state.token;
