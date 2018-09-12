@@ -11,6 +11,7 @@ import ResultadoExperimento from './resultado_de_experimentos/index.js';
 import SesionInicio from './sesion_de_inicio/index.js';
 import VistaParcial from './vista_parcial/index.js';
 import VerExperimento from './ver_experimento/index.js';
+import VerResultado from "./ver_resultado";
 
 
 class AuthExample extends Component {
@@ -117,8 +118,9 @@ class AuthExample extends Component {
                 <EditarExperimento {...props} logout={this.logout} mainState={this.state} 
                   setMessage={this.setMessage}/>)}/>
               
-              <Route path="/:userName/ver_experimento/:idExp" render={()=>(
-                <VerExperimento logout={this.logout}/>)}/>
+              <Route path="/:userName/ver_experimento/:idExp" render={(props)=>(
+                <VerExperimento {...props} logout={this.logout} mainState={this.state}
+                  setMessage={this.setMessage}/>)}/>
               
               <Route path="/:userName/lista_de_experimentos" render={(props)=>(
                 <ListaExperimento {...props}  mainState={this.state} logout={this.logout} 
@@ -130,13 +132,19 @@ class AuthExample extends Component {
               <Route path="/:userName/procesamiento_de_datos/:idExp" render={()=>(
                 <ProcesamientoDato logout={this.logout}/>)}/>
               
-              <Route path="/:userName/resultado_de_experimentos" render={()=>(
-                <ResultadoExperimento logout={this.logout}/>)}/>
+              <Route path="/:userName/resultado_de_experimentos" render={(props)=>(
+                <ResultadoExperimento {...props}  mainState={this.state} logout={this.logout}
+                  setMessage={this.setMessage}/>)}/>
               
               <Route path="/:userName/vista_parcial" render={(props)=>(
                 <VistaParcial {...props} logout={this.logout} mainState={this.state} 
                   setMessage={this.setMessage}/>)}/>
+
+              <Route path="/:userName/ver_resultado/:idExp" render={(props)=>(
+                <VerResultado {...props} logout={this.logout} mainState={this.state}
+                  setMessage={this.setMessage}/>)}/>
               </div>
+
             </Router>;
     return res;
   }

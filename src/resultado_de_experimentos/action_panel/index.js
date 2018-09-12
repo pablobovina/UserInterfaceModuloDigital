@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import {Redirect, NavLink} from 'react-router-dom';
 
 class ActionPanel extends Component {
 
@@ -16,12 +16,8 @@ class ActionPanel extends Component {
     this.setState({messagePanel: msg});
   }
 
-  onEdit = () =>{
-    this.setState({editClick: true});
-  }
-
   onView = () =>{
-    this.setState({viewClick: true});
+    this.setState({onView: true});
   }
 
   onStartExec= () =>{
@@ -70,10 +66,59 @@ class ActionPanel extends Component {
 
   }
 
+  onStopExec =() =>{
+    const username =  this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+    const idExp  = this.props.selectedItem;
+    var url  = ['/','user/',username,'/experiments/',idExp,"/stop"].join("");
+    var axios = require("axios");
+    axios({method: "GET",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session},
+            data:{}
+        })
+    .then((data)=>{
+      var d = data.data;
+      this.setState({onStopExec: true});
+    })
+    .catch((err)=>{
+      this.props.setMessage(err.response.data);
+      //this.props.logout();
+    });
+  }
+
+  onResult= () =>{
+    const username =  this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+    const idExp  = this.props.selectedItem;
+    var url  = ['/','user/',username,'/experiments/',idExp,"/zip"].join("");
+    var axios = require("axios");
+    axios({method: "GET",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session},
+            data:{},
+            responseType: 'blob', // important
+        })
+    .then((response)=>{
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'reporte.zip');
+      document.body.appendChild(link);
+      link.click();
+    })
+    .catch((err)=>{
+      this.props.setMessage(err.response.data);
+      //this.props.logout();
+    });
+
+  }
 
   render (){
-    if(this.props.selectedItem && this.state.editClick){
-      var url  = ["editar_experimento/",this.props.selectedItem].join("");
+    if(this.props.selectedItem && this.state.onView){
+      var url  = ["ver_resultado/",this.props.selectedItem].join("");
       return (<Redirect to={url}/>);
     }
 
@@ -82,10 +127,6 @@ class ActionPanel extends Component {
       return (<Redirect to={url}/>);
     }
 
-    if(this.props.selectedItem && this.state.viewClick){
-      var url  = ["ver_experimento/",this.props.selectedItem].join("");
-      return (<Redirect to={url}/>);
-    }
 
     const res =
     <nav className="navbar navbar-expand-lg navbar-light">
@@ -100,8 +141,6 @@ class ActionPanel extends Component {
             </a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                <a className="dropdown-item" onClick={this.onView}>Ver</a>
-               <a className="dropdown-item" onClick={this.onEdit}>Editar</a>
-               <a className="dropdown-item" onClick={this.onDelete}>Eliminar</a>
             </div>
           </li>
           <li className="nav-item dropdown">
@@ -110,6 +149,16 @@ class ActionPanel extends Component {
            </a>
            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
              <a className="dropdown-item" onClick={this.onStartExec}>Iniciar ejecucion</a>
+             <a className="dropdown-item" onClick={this.onStopExec}>Cancelar ejecucion</a>
+           </div>
+          </li>
+          <li className="nav-item dropdown">
+           <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Analisis
+           </a>
+           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+             <a className="dropdown-item" onClick={this.onResult}>Resultados</a>
+             <a className="dropdown-item" onClick={this.onDelete}>Postprocesado</a>
            </div>
           </li>
         </ul>

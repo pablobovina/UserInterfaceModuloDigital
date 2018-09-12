@@ -7,7 +7,7 @@ import GeneralSettings from"./general_settings/index.js";
 import ExperimentAdmin from "./experiment_admin/index.js";
 import NotificationArea from "../notification_area/notification.js";
 
-class VerExperimento extends Component {
+class VerResultado extends Component {
 
   constructor(props) {
     super(props);
@@ -44,7 +44,7 @@ class VerExperimento extends Component {
     const session = this.state.mainState.session;
     const token =  this.state.mainState.token;
 
-    var url  = ['/','user/',username,'/experiments/',idExp].join("");
+    var url  = ['/','user/',username,'/experiments/',idExp,'/result_experiment'].join("");
     var axios = require("axios");
     axios({method: "GET",
             url: url,
@@ -195,4 +195,4 @@ class VerExperimento extends Component {
   }
 }
 
-export default VerExperimento;
+export default VerResultado;

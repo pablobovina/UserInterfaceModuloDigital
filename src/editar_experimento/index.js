@@ -129,7 +129,7 @@ class EditarExperimento extends Component {
 
     //ejecucion
     if(exec){
-      var url  = ['/','user/',username,'/executor/',idExp,"/run"].join("");
+      var url  = ['/','user/',username,'/experiments/',idExp,"/run"].join("");
       var axios = require("axios");
       axios({method: "GET",
               url: url,
@@ -170,8 +170,7 @@ class EditarExperimento extends Component {
     var exec = this.state.execute;
     if(exec){
       var username = this.state.mainState.username;
-      var url  = ["/",username,"/vista_parcial"].join("");
-      console.log("nos vamos a vista parcial de la ejecucion en curso");
+      var url  = ["/",username,"/resultado_de_experimentos"].join("");
       console.log(url);
       return (<Redirect to={url}/>);
     }
