@@ -31,8 +31,8 @@ class TablaExperimento extends Component {
       this.setState({products: d.datas, error:d.error, msg: d.msg, authError:d.authError});
     })
     .catch((err)=>{
-      this.props.setMessage(err);
-      this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
   }
 

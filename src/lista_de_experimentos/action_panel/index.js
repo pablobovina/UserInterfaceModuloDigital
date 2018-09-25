@@ -14,21 +14,41 @@ class ActionPanel extends Component {
 
   setMessage= (msg)=>{
     this.setState({messagePanel: msg});
-  }
+  };
 
   onEdit = () =>{
+    const idExp  = this.props.selectedItem;
+    if(!idExp){
+      this.props.setMessage("por favor seleccione un elemento de la lista");
+      console.log("idExp no seleccionado");
+      return;
+    }
     this.setState({editClick: true});
-  }
+  };
 
   onView = () =>{
+    const idExp  = this.props.selectedItem;
+    if(!idExp){
+      this.props.setMessage("por favor seleccione un elemento de la lista");
+      console.log("idExp no seleccionado");
+      return;
+    }
     this.setState({viewClick: true});
-  }
+  };
 
   onStartExec= () =>{
     const username =  this.state.mainState.username;
     const session = this.state.mainState.session;
     const token =  this.state.mainState.token;
     const idExp  = this.props.selectedItem;
+
+    if(!idExp){
+      this.props.setMessage("por favor seleccione un elemento de la lista");
+      console.log("idExp no seleccionado");
+      return;
+    }
+
+
     var url  = ['/','user/',username,'/experiments/',idExp,"/run"].join("");
     var axios = require("axios");
     axios({method: "GET",
@@ -41,8 +61,8 @@ class ActionPanel extends Component {
       this.setState({onStartExec: true});
     })
     .catch((err)=>{
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
 
   }
@@ -52,6 +72,13 @@ class ActionPanel extends Component {
     const session = this.state.mainState.session;
     const token =  this.state.mainState.token;
     const idExp  = this.props.selectedItem;
+
+    if(!idExp){
+      this.props.setMessage("por favor seleccione un elemento de la lista");
+      console.log("idExp no seleccionado");
+      return;
+    }
+
     var url  = ['/','user/',username,'/experiments/',idExp].join("");
     var axios = require("axios");
     axios({method: "DELETE",
@@ -64,8 +91,8 @@ class ActionPanel extends Component {
       this.setState({onDelete: true});
     })
     .catch((err)=>{
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
 
   }

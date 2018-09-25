@@ -55,9 +55,8 @@ class VerExperimento extends Component {
       this.setState({cpoints: d.data.cpoints, settings: d.data.settings});
     })
     .catch((err)=>{
-      console.log(err);
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
   }
 
@@ -123,8 +122,8 @@ class VerExperimento extends Component {
       this.setState({isSaved:true, experimentSaved:d.expId});
     })
     .catch((err)=>{
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
 
     //ejecucion
@@ -141,12 +140,8 @@ class VerExperimento extends Component {
         this.setState({execute: exec});
       })
       .catch((err)=>{
-        this.props.setMessage(err.response.data);
-        //this.props.logout();
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-        this.setState({errormessage: err.response.data});
+        this.props.setMessage(err.response.data.error);
+        console.log(err.response.data.error);
       });
     }
 
@@ -177,7 +172,7 @@ class VerExperimento extends Component {
     }
 
     const res = <div>
-                <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} />
+                <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} setMessage={this.props.setMessage}/>
                 <NotificationArea message={this.props.mainState.message} setMessage={this.props.setMessage}/>
                 <div class="container-fluid">
                   <div class="row">

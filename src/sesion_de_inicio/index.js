@@ -38,11 +38,11 @@ class SesionInicio extends Component {
 
     const res =
     <div className=".container-fluid">
-    <PanelGeneral mainState={this.state.mainState}/>
+    <PanelGeneral mainState={this.state.mainState} />
       <div className="row justify-content-center align-items-center">
         <div className="col-3 align-self-center" style={{margin:"50px"}}>
           <div>
-            { error ? ( <div class="alert alert-warning" role="alert"> {msg} </div>):(<div></div>)}
+            { msg ? ( <div class="alert alert-warning" role="alert"> {msg} </div>):(<div></div>)}
             <div className="form-group">
               <label for="exampleInputEmail1">Username</label>
               <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username" onChange={this.setUsername}/>

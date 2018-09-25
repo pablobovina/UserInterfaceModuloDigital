@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom'
 import PanelGeneral from '../panel_general/index.js';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import NotificationArea from "../notification_area/notification.js";
 
 class VistaParcial extends Component {
   constructor(props) {
@@ -30,9 +31,8 @@ class VistaParcial extends Component {
       this.setState({dataFromServer:d});
     })
     .catch((err)=>{
-      console.log(err);
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
   }
 
@@ -48,7 +48,8 @@ class VistaParcial extends Component {
     }
 
     const res = <div>
-                  <PanelGeneral logout={this.props.logout} mainState={this.state.mainState}/>
+                  <PanelGeneral logout={this.props.logout} mainState={this.state.mainState} setMessage={this.props.setMessage}/>
+                  <NotificationArea message={this.props.mainState.message} setMessage={this.props.setMessage}/>
                   <div className="container-fluid">
                     <div className="row">
                       <div className="col">

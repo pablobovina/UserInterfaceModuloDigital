@@ -17,53 +17,13 @@ class ActionPanel extends Component {
   }
 
   onView = () =>{
+    const idExp  = this.props.selectedItem;
+    if(!idExp){
+      this.props.setMessage("por favor seleccione un elemento de la lista");
+      console.log("idExp no seleccionado");
+      return;
+    }
     this.setState({onView: true});
-  }
-
-  onStartExec= () =>{
-    const username =  this.state.mainState.username;
-    const session = this.state.mainState.session;
-    const token =  this.state.mainState.token;
-    const idExp  = this.props.selectedItem;
-    var url  = ['/','user/',username,'/experiments/',idExp,"/run"].join("");
-    var axios = require("axios");
-    axios({method: "GET",
-            url: url,
-            headers: {"X-CSRFToken": token, "sessionid":session},
-            data:{}
-        })
-    .then((data)=>{
-      var d = data.data;
-      this.setState({onStartExec: true});
-    })
-    .catch((err)=>{
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
-    });
-
-  }
-
-  onDelete= () =>{
-    const username =  this.state.mainState.username;
-    const session = this.state.mainState.session;
-    const token =  this.state.mainState.token;
-    const idExp  = this.props.selectedItem;
-    var url  = ['/','user/',username,'/experiments/',idExp].join("");
-    var axios = require("axios");
-    axios({method: "DELETE",
-            url: url,
-            headers: {"X-CSRFToken": token, "sessionid":session},
-            data:{}
-        })
-    .then((data)=>{
-      var d = data.data;
-      this.setState({onDelete: true});
-    })
-    .catch((err)=>{
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
-    });
-
   }
 
   onStopExec =() =>{
@@ -71,6 +31,13 @@ class ActionPanel extends Component {
     const session = this.state.mainState.session;
     const token =  this.state.mainState.token;
     const idExp  = this.props.selectedItem;
+
+    if(!idExp){
+      this.props.setMessage("por favor seleccione un elemento de la lista");
+      console.log("idExp no seleccionado");
+      return;
+    }
+
     var url  = ['/','user/',username,'/experiments/',idExp,"/stop"].join("");
     var axios = require("axios");
     axios({method: "GET",
@@ -83,16 +50,23 @@ class ActionPanel extends Component {
       this.setState({onStopExec: true});
     })
     .catch((err)=>{
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
   }
 
-  onResult= () =>{
+  onReport= () =>{
     const username =  this.state.mainState.username;
     const session = this.state.mainState.session;
     const token =  this.state.mainState.token;
     const idExp  = this.props.selectedItem;
+
+    if(!idExp){
+      this.props.setMessage("por favor seleccione un elemento de la lista");
+      console.log("idExp no seleccionado");
+      return;
+    }
+
     var url  = ['/','user/',username,'/experiments/',idExp,"/zip"].join("");
     var axios = require("axios");
     axios({method: "GET",
@@ -110,8 +84,8 @@ class ActionPanel extends Component {
       link.click();
     })
     .catch((err)=>{
-      this.props.setMessage(err.response.data);
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
 
   }
@@ -119,11 +93,6 @@ class ActionPanel extends Component {
   render (){
     if(this.props.selectedItem && this.state.onView){
       var url  = ["ver_resultado/",this.props.selectedItem].join("");
-      return (<Redirect to={url}/>);
-    }
-
-    if(this.props.selectedItem && this.state.onDelete){
-      var url  = ["lista_de_experimentos/"].join("");
       return (<Redirect to={url}/>);
     }
 
@@ -148,7 +117,6 @@ class ActionPanel extends Component {
              Ejecucion
            </a>
            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-             <a className="dropdown-item" onClick={this.onStartExec}>Iniciar ejecucion</a>
              <a className="dropdown-item" onClick={this.onStopExec}>Cancelar ejecucion</a>
            </div>
           </li>
@@ -157,8 +125,7 @@ class ActionPanel extends Component {
              Analisis
            </a>
            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-             <a className="dropdown-item" onClick={this.onResult}>Resultados</a>
-             <a className="dropdown-item" onClick={this.onDelete}>Postprocesado</a>
+             <a className="dropdown-item" onClick={this.onReport}>Reporte</a>
            </div>
           </li>
         </ul>

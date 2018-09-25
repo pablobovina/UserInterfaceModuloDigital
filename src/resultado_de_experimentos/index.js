@@ -27,7 +27,7 @@ class ResultadoExperimento extends Component {
     }
 
     const res = <div>
-                <PanelGeneral mainState={this.state.mainState} logout={this.props.logout}  />
+                <PanelGeneral mainState={this.state.mainState} logout={this.props.logout}  setMessage={this.props.setMessage}/>
                 <NotificationArea message={this.props.mainState.message} setMessage={this.props.setMessage}/>
                 <ActionPanel mainState={this.state.mainState} logout={this.props.logout} selectedItem={this.state.selectedItem} setMessage={this.props.setMessage}/>
                 <div class="container-fluid">

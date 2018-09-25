@@ -18,6 +18,28 @@ class PanelGeneral extends Component {
     this.props.logout();
   }
 
+  onStopAll =() =>{
+    const username =  this.state.mainState.username;
+    const session = this.state.mainState.session;
+    const token =  this.state.mainState.token;
+    const idExp  = this.props.selectedItem;
+    var url  = ['/','user/',username,'/experiments/stop_all'].join("");
+    var axios = require("axios");
+    axios({method: "GET",
+            url: url,
+            headers: {"X-CSRFToken": token, "sessionid":session},
+            data:{}
+        })
+    .then((data)=>{
+      var d = data.data;
+      this.setState({onStopExec: true});
+    })
+    .catch((err)=>{
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
+    });
+  }
+
   render() {
     const error = this.state.mainState.error;
     const username = this.state.mainState.username;
@@ -71,12 +93,7 @@ class PanelGeneral extends Component {
                 activeClassName="nav-link active"
                 >Vista Parcial
               </NavLink>
-              <NavLink
-                className = "dropdown-item"
-                to={url_base+"/monitor_de_estado"}
-                activeClassName="nav-link active"
-                >Estado de Sistema
-              </NavLink>
+              <a className="dropdown-item" onClick={this.onStopAll}>Cancelar todo</a>
             </div>
           </li>
         </ul>

@@ -17,7 +17,8 @@ class NotificationArea extends Component {
     var d = {__html: octicons.alert.toSVG()};
     //return <div className="bar" onClick={this.props.clean}><div dangerouslySetInnerHTML={d}/><div>{this.state.message}</div></div>;
     if(this.props.message){
-        return <div className="bar" onClick={this.clean}>&#9889; {this.props.message[0]}</div>;
+        let msg = this.props.message.split (';').map ((item, i) => <text class="font-weight-light wrapp" key={i}>&#9889;{item + "\n"}</text>);
+        return  <div class="alert alert-danger" role="alert" onClick={this.clean}> {msg} </div>;
     }
     return <div></div>
   }

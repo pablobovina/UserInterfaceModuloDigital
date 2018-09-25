@@ -67,12 +67,15 @@ class AuthExample extends Component {
           "error":false, 
           "username": username,
           "token":token, 
-          "session": session};
+          "session": session,
+          "message":"",};
           sessionStorage.setItem("mainState", JSON.stringify(newState));
-          this.setState(newState);        
+          this.setState(newState);
+
       })
       .catch(error =>{
-        this.setState({"error": true, "message":error.response.data});
+        this.setMessage(error.response.data.error);
+        console.log(error.response.data.error);
       });
   }
 
@@ -90,6 +93,8 @@ class AuthExample extends Component {
       .then(response => {
       })
       .catch(error => {
+          this.setMessage(error.response.data.error);
+          console.log(error.response.data.error);
       });
       var newState = {"error":false, "message":"", "token":"", "session": "", "username":""};
       this.setState(newState);
@@ -108,7 +113,8 @@ class AuthExample extends Component {
     const res = <Router>
               <div>
               <Route exact path="/" render = {(props)=>(
-                <SesionInicio {...props} login={this.login} mainState={this.state}/>)}/>
+                <SesionInicio {...props} login={this.login} mainState={this.state}
+                  setMessage={this.setMessage}/>)}/>
 
               <Route path="/:userName/crear_experimento" render = {(props)=>(
                 <CrearExperimento {...props} mainState={this.state} logout={this.logout} 

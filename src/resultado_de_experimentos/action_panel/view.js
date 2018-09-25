@@ -24,8 +24,8 @@ class ViewExperimento extends Component {
       }
     })
     .catch((err) => {
-      this.setState({products:err.datas, error:true, msg:err.toString(), authError:true});
-      //this.props.logout();
+      this.props.setMessage(err.response.data.error);
+      console.log(err.response.data.error);
     });
   }
 

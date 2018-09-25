@@ -1,1 +1,4 @@
 .bar{background: red}
+.wrapp{
+  white-space: pre-wrap;
+}
